@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Nav } from "./nav";
+import { isDemoMode } from "@/lib/db";
 
 export const metadata: Metadata = {
   title: "PatchGPT — AI Windows Patch Management",
@@ -24,7 +25,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               SCCM, or Intune in Settings.
             </div>
           </aside>
-          <main className="main">{children}</main>
+          <main className="main">
+            {isDemoMode() && (
+              <div className="demo-banner">
+                Live demo — simulated fleet, deterministic AI mode, read-only settings. Data resets
+                every 2 hours.{" "}
+                <a href="https://github.com/omrzk/patchgpt" target="_blank" rel="noreferrer">
+                  Get the source on GitHub
+                </a>
+              </div>
+            )}
+            {children}
+          </main>
         </div>
       </body>
     </html>

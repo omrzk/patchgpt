@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getDb, setSetting } from "@/lib/db";
+import { getDb, isDemoMode, setSetting } from "@/lib/db";
 import { aiMode } from "@/lib/ai";
 
 const KEYS = [
@@ -35,10 +35,16 @@ export async function GET() {
     // Secrets are write-only; non-secrets are shown.
     value: SECRET.has(key) ? undefined : map.get(key) ?? "",
   }));
-  return NextResponse.json({ settings, aiMode: aiMode() });
+  return NextResponse.json({ settings, aiMode: aiMode(), demoMode: isDemoMode() });
 }
 
 export async function POST(req: NextRequest) {
+  if (isDemoMode()) {
+    return NextResponse.json(
+      { error: "Demo mode: settings are read-only. Run your own instance to connect real systems." },
+      { status: 403 }
+    );
+  }
   const body = (await req.json()) as Record<string, string>;
   for (const [key, value] of Object.entries(body)) {
     if (!KEYS.includes(key)) continue;

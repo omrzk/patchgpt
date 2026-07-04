@@ -105,9 +105,33 @@ export function getDb(): Database.Database {
   db = new Database(path.join(dataDir, "patchgpt.db"));
   db.pragma("journal_mode = WAL");
   db.exec(SCHEMA);
+  if (isDemoMode()) resetDemoIfStale(db);
   const count = db.prepare("SELECT COUNT(*) AS n FROM servers").get() as { n: number };
   if (count.n === 0) seedDemoData(db);
   return db;
+}
+
+export function isDemoMode(): boolean {
+  return process.env.DEMO_MODE === "1";
+}
+
+const DEMO_RESET_MS = 2 * 60 * 60 * 1000;
+const ALL_TABLES = [
+  "servers", "patches", "cves", "patch_cves", "server_patches",
+  "reboot_history", "explanations", "plans", "reports", "settings",
+];
+
+/** In demo mode, wipe visitor-created plans/reports and reseed every 2 hours. */
+function resetDemoIfStale(db: Database.Database) {
+  const row = db.prepare("SELECT value FROM settings WHERE key = 'demo_seeded_at'").get() as
+    | { value: string }
+    | undefined;
+  if (row && Date.now() - new Date(row.value).getTime() < DEMO_RESET_MS) return;
+  for (const t of ALL_TABLES) db.exec(`DELETE FROM ${t}`);
+  seedDemoData(db);
+  db.prepare("INSERT INTO settings (key, value) VALUES ('demo_seeded_at', ?)").run(
+    new Date().toISOString()
+  );
 }
 
 export function getSetting(key: string): string | null {

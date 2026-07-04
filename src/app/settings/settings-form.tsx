@@ -51,6 +51,7 @@ export function SettingsForm() {
   const [rows, setRows] = useState<Record<string, SettingRow>>({});
   const [values, setValues] = useState<Record<string, string>>({});
   const [aiMode, setAiMode] = useState<string>("");
+  const [demoMode, setDemoMode] = useState(false);
   const [saved, setSaved] = useState(false);
   const [busy, setBusy] = useState(false);
 
@@ -66,6 +67,7 @@ export function SettingsForm() {
     setRows(map);
     setValues(vals);
     setAiMode(data.aiMode);
+    setDemoMode(!!data.demoMode);
   }
 
   useEffect(() => {
@@ -101,6 +103,12 @@ export function SettingsForm() {
         AI mode: <strong>{aiMode || "…"}</strong>
         {aiMode === "mock" && " — no key configured; explanations are engine-generated."}
       </div>
+      {demoMode && (
+        <div className="callout warn" style={{ marginBottom: 20 }}>
+          This is the public demo — settings are read-only. Run your own instance to connect Azure
+          Update Manager, SCCM, Intune, or an AI key.
+        </div>
+      )}
 
       <div className="grid cols-2">
         {GROUPS.map((g) => (
@@ -126,8 +134,8 @@ export function SettingsForm() {
       </div>
 
       <div style={{ marginTop: 18, display: "flex", gap: 10, alignItems: "center" }}>
-        <button className="primary" onClick={save} disabled={busy}>
-          {busy ? "Saving…" : "Save settings"}
+        <button className="primary" onClick={save} disabled={busy || demoMode}>
+          {busy ? "Saving…" : demoMode ? "Read-only in demo" : "Save settings"}
         </button>
         {saved && <span className="small" style={{ color: "var(--ok)" }}>Saved.</span>}
       </div>

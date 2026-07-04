@@ -1,5 +1,8 @@
 # PatchGPT
 
+> **Live demo:** the public demo runs with `DEMO_MODE=1` — simulated fleet, deterministic AI
+> mode, read-only settings, data resets every 2 hours.
+
 AI-powered Windows patch management. Unlike WSUS, PatchGPT **explains** patches: what each fix
 actually prevents, what might break, which CVEs matter, and what the business impact of deferring
 is — and it explains **every recommendation it makes** (priority scores, maintenance windows,
@@ -80,6 +83,7 @@ Optional environment/settings:
 | `ANTHROPIC_API_KEY` (or Settings) | AI explanations via Anthropic (claude-opus-4-8) |
 | `OPENROUTER_API_KEY` (or Settings) | Fallback LLM provider |
 | `PATCHGPT_MOCK=1` | Force deterministic mode even with keys present |
+| `DEMO_MODE=1` | Public-demo hardening: settings read-only, connectors and external AI disabled, data auto-resets every 2 h |
 | Azure/SCCM/Intune credentials | See Settings page for the exact fields |
 
 The demo database seeds a fictional 14-server fleet ("Helios Dynamics") with a realistic
@@ -89,3 +93,7 @@ Patch-Tuesday backlog. All demo KB numbers, CVEs, and hostnames are simulated.
 
 - Connector and AI secrets are write-only via the Settings API and stored server-side in SQLite.
 - Run behind a reverse proxy with SSO in production; v1 has no built-in auth by design.
+
+## License
+
+[AGPL-3.0-only](LICENSE) © omrzk

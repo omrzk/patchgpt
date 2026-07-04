@@ -201,6 +201,16 @@ label { font-size: 12.5px; font-weight: 600; color: var(--text-dim); display: bl
   overflow-x: auto;
 }
 
+.demo-banner {
+  background: #0f1b2d;
+  color: #cfe0f5;
+  border-radius: var(--radius);
+  padding: 10px 16px;
+  font-size: 13px;
+  margin-bottom: 22px;
+}
+.demo-banner a { color: #6ea8ff; font-weight: 600; }
+
 .toolbar { display: flex; gap: 10px; align-items: center; margin-bottom: 18px; flex-wrap: wrap; }
 .spacer { flex: 1; }
 

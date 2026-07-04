@@ -14,6 +14,8 @@ function openrouterKey() {
 }
 
 export function aiMode(): "anthropic" | "openrouter" | "mock" {
+  // Demo deployments never call external AI, even if a key leaks into the env.
+  if (process.env.DEMO_MODE === "1") return "mock";
   if (process.env.PATCHGPT_MOCK === "1") return "mock";
   if (anthropicKey()) return "anthropic";
   if (openrouterKey()) return "openrouter";
