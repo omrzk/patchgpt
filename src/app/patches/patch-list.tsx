@@ -25,7 +25,7 @@ export function PatchList({ rows }: { rows: Row[] }) {
     if (explanations[kb]) return;
     setLoading(kb);
     try {
-      const res = await fetch("/api/explain", {
+      const res = await fetch((process.env.NEXT_PUBLIC_BASE_PATH || "") + "/api/explain", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ kb }),

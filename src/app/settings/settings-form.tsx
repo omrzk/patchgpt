@@ -56,7 +56,7 @@ export function SettingsForm() {
   const [busy, setBusy] = useState(false);
 
   async function load() {
-    const res = await fetch("/api/settings");
+    const res = await fetch((process.env.NEXT_PUBLIC_BASE_PATH || "") + "/api/settings");
     const data = await res.json();
     const map: Record<string, SettingRow> = {};
     const vals: Record<string, string> = {};
@@ -78,7 +78,7 @@ export function SettingsForm() {
     setBusy(true);
     setSaved(false);
     try {
-      await fetch("/api/settings", {
+      await fetch((process.env.NEXT_PUBLIC_BASE_PATH || "") + "/api/settings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),

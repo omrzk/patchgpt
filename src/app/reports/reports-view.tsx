@@ -19,7 +19,7 @@ export function ReportsView({ reports }: { reports: ReportMeta[] }) {
   async function generateCompliance() {
     setBusy(true);
     try {
-      await fetch("/api/reports", {
+      await fetch((process.env.NEXT_PUBLIC_BASE_PATH || "") + "/api/reports", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ type: "compliance" }),
@@ -35,7 +35,7 @@ export function ReportsView({ reports }: { reports: ReportMeta[] }) {
       setOpenId(null);
       return;
     }
-    const res = await fetch(`/api/reports/${id}`);
+    const res = await fetch((process.env.NEXT_PUBLIC_BASE_PATH || "") + `/api/reports/${id}`);
     const data = await res.json();
     setContent(data.report?.content ?? "");
     setOpenId(id);

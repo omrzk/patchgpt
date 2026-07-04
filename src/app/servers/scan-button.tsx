@@ -17,7 +17,7 @@ export function ScanButton() {
   const [result, setResult] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/scan")
+    fetch((process.env.NEXT_PUBLIC_BASE_PATH || "") + "/api/scan")
       .then((r) => r.json())
       .then((d) => setConnectors(d.connectors ?? []));
   }, []);
@@ -26,7 +26,7 @@ export function ScanButton() {
     setBusy(true);
     setResult(null);
     try {
-      const res = await fetch("/api/scan", {
+      const res = await fetch((process.env.NEXT_PUBLIC_BASE_PATH || "") + "/api/scan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ source }),

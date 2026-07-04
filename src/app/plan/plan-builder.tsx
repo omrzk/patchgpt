@@ -65,7 +65,7 @@ export function PlanBuilder({
     setBusy(true);
     setError(null);
     try {
-      const res = await fetch("/api/plan", {
+      const res = await fetch((process.env.NEXT_PUBLIC_BASE_PATH || "") + "/api/plan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, kbs: [...selected] }),
@@ -81,12 +81,12 @@ export function PlanBuilder({
   }
 
   async function makeReport(planId: number) {
-    await fetch("/api/reports", {
+    await fetch((process.env.NEXT_PUBLIC_BASE_PATH || "") + "/api/reports", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ type: "deployment", planId }),
     });
-    window.location.href = "/reports";
+    window.location.href = (process.env.NEXT_PUBLIC_BASE_PATH || "") + "/reports";
   }
 
   return (
